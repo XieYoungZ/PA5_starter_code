@@ -18,7 +18,7 @@ public interface DefaultMap<K, V> {
 	}
 
 	/**
-	 * Adds the specified key, value pair to this DefaultMap
+	 * Adds the specified key, value pair to this DefaultMap if it is not present
 	 * Note: duplicate keys are not allowed
 	 * 
 	 * @return true if the key value pair was added to this DefaultMap
@@ -27,7 +27,7 @@ public interface DefaultMap<K, V> {
 	boolean put(K key, V value) throws IllegalArgumentException;
 	
 	/**
-	 * Replaces the value that maps to the key if it is present
+	 * Replaces the value that maps to the key only if it is present
 	 * @param key The key whose mapped value is being replaced
 	 * @param newValue The value to replace the existing value with
 	 * @return true if the key was in this DefaultMap

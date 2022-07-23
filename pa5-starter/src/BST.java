@@ -75,7 +75,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	
 	private static class Node<K extends Comparable<? super K>, V> implements DefaultMap.Entry<K, V> {
 		/* 
-		 * TODO: Add instance variables
+		 * TODO: Add instance variables and constructor
 		 */
 
 		@Override

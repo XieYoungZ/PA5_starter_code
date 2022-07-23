@@ -31,7 +31,7 @@ public class FileSystem {
     }
 
     // TODO
-    public boolean add(String fileName, String directory, String modifiedDate) {
+    public boolean add(String name, String directory, String modifiedDate) {
         return true; // TODO this is a placeholder so your code compiles
     }
 
@@ -41,7 +41,7 @@ public class FileSystem {
     }
 
     // TODO
-    public ArrayList<String> findAllFilesName() {
+    public ArrayList<String> findAllFileNames() {
         return null; // TODO this is a placeholder so your code compiles
     }
 
