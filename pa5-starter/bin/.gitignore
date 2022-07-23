@@ -1,12 +1,9 @@
 /BST$Node.class
 /BST.class
-/BSTFileSystem$DateComparator.class
-/BSTFileSystem.class
-/BSTFileSystemTest.class
 /BSTTest.class
 /DefaultMap$Entry.class
 /DefaultMap.class
 /FileData.class
-/HashMapFileSystem.class
-/HashMapFileSystemTest.class
+/FileSystem.class
+/FileSystemTest.class
 /input.txt

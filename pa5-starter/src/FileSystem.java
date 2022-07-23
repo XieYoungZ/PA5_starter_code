@@ -4,18 +4,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class HashMapFileSystem {
+public class FileSystem {
 
     HashMap<String, ArrayList<FileData>> nameMap;
     HashMap<String, ArrayList<FileData>> dateMap;
 
     // TODO
-    public HashMapFileSystem() {
+    public FileSystem() {
 
     }
 
     // TODO
-    public HashMapFileSystem(String inputFile) {
+    public FileSystem(String inputFile) {
         // Add your code here
         try {
             File f = new File(inputFile);
