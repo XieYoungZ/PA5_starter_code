@@ -14,4 +14,15 @@ public class BSTTest {
 	public void dummyTest() {
 		
 	}
+
+	@Test
+	public void dummyTest2() {
+		BST test = new BST<>();
+		test.put("C", 3);
+		test.put("A", 1);
+		test.put("B", 2);
+		
+		boolean answer = test.put("A", 1);
+		assertFalse(answer);
+	}
 }
