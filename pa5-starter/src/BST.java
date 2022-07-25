@@ -43,6 +43,9 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	@Override
 	public boolean put(K key, V value) throws IllegalArgumentException {
 		try {
+			if(key == null) {
+				throw new IllegalArgumentException();
+			}
 			if(this.root.key == null){
 				this.root.key = key;
 				this.root.value = value;
@@ -62,8 +65,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 					} else {
 						current = current.right;
 					}
-				}
-				if(current.key.compareTo(key) > 0) {
+				} else if(current.key.compareTo(key) > 0) {
 					if(current.left == null) {
 						current.left = new Node<K, V>(key, value);
 						this.size += 1;
@@ -111,8 +113,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return (size == 0);
 	}
 
 	@Override
