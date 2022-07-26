@@ -115,9 +115,94 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return false;
+		if(key == null) {
+			throw new IllegalArgumentException();
+		}
+		if(!this.containsKey(key)) {
+			return false;
+		}
+		deteleNode(key);
+		return true;
 	}
+		
+	
+	 
+	private void deteleNode(Comparable key){
+		Node current = root;
+		Node parent = null;
+		while(current != null){
+			parent = current;
+			if(current.key.compareTo(key) < 0) {
+				current = current.right;
+			} else if(current.key.compareTo(key) > 0) {
+				current = current.left;
+			}
+		}
+		if(current.left == null && current.right == null) {
+			if(current != this.root) {
+				if(parent.left == null) {
+					parent.right = null;
+					this.size --;
+					return;
+				} else if(parent.right == null) {
+					parent.left = null;
+					this.size --;
+					return;
+				}
+			} else {
+				this.root = null;
+				return;
+			}
+		}
+		return;
+	}
+
+	private K findMinKey(Node current) {
+		K minKey = (K) current.key;
+		while(current.left != null) {
+			minKey = root.left.key;
+			root = root.left;
+		}
+		return minKey;
+	}
+
+	// else {
+	// 	if(current.left == null) {
+	// 		current = current.right;
+	// 		this.size -= 1;
+	// 		return;
+	// 	} else if(current.right == null) {
+	// 		current = current.left;
+	// 		this.size -= 1;
+	// 		return;
+	// 	}
+	// 	current.key = findMinKey(current.right);
+	// 	//current.right = deteleNode(current.right, current.key);
+	// }
+
+	// Node parent = null;
+		// Node current = this.root;
+		// while(current != null) {
+		// 	parent = current;
+		// 	if(current.key.compareTo(key) < 0) {
+		// 		current = current.right;
+		// 	} else if(current.key.compareTo(key) > 0) {
+		// 		current = current.left;
+		// 	}
+		// }
+		// if(current.left == null && current.right == null) {
+		// 	if(current != this.root) {
+		// 		if(parent.left == null) {
+		// 			parent.right = null;
+		// 		} else if(parent.right == null) {
+		// 			parent.left = null;
+		// 		}
+		// 	} else {
+		// 		this.root = null;
+		// 	}
+		// } else if(current.left != null && current.right != null) {
+		// 	Node successorNode = findMinKey(current)
+		// }
 
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {

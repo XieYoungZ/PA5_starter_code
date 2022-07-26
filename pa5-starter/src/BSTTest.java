@@ -49,4 +49,20 @@ public class BSTTest {
 		assertTrue(answer);
 		assertEquals(changedValue, 2);
 	}
+
+	@Test
+	public void removeTest1() {
+		BST test = new BST<>();
+		test.put("C", 3);
+		test.put("A", 1);
+		test.put("B", 2);
+		
+		//boolean answer = test.remove("A");
+		//int value = (int) test.get("C");
+		//int size = test.size();
+		//assertTrue(answer);
+		//assertEquals(2, size);
+		//assertEquals(2, value);
+	}
+
 }
