@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -42,33 +43,65 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 */
 	@Override
 	public boolean put(K key, V value) throws IllegalArgumentException {
-		try {
-			if(key == null) {
-				throw new IllegalArgumentException();
+		if(key == null) {
+			throw new IllegalArgumentException();
+		}
+		if(this.root.key == null){
+			this.root.key = key;
+			this.root.value = value;
+			this.size += 1;
+			return true;
+		} else if (this.root.key.equals(key)){
+			return false;
+		}
+		Node current = this.root;
+		while(true) {
+			if(current.key.compareTo(key) < 0) {
+				if(current.right == null) {
+					current.right = new Node<K, V>(key, value);
+					this.size += 1;
+					return true;
+				} else {
+					current = current.right;
+				}
+			} else if(current.key.compareTo(key) > 0) {
+				if(current.left == null) {
+					current.left = new Node<K, V>(key, value);
+					this.size += 1;
+					return true;
+				} else {
+					current = current.left;
+				}
 			}
-			if(this.root.key == null){
-				this.root.key = key;
-				this.root.value = value;
-				this.size += 1;
+			return false;
+		}
+	}
+
+	@Override
+	public boolean replace(K key, V newValue) throws IllegalArgumentException {
+		if(key == null) {
+			throw new IllegalArgumentException();
+		}
+		// if(newValue == null) {
+		// 	return false;
+		// }
+		if(this.containsKey(key)){
+			if(this.root.key == key){
+				this.root.setValue(newValue);
 				return true;
-			} else if (this.root.key.equals(key)){
-				return false;
 			}
 			Node current = this.root;
-			while(true) {
+			while(current != null){
 				if(current.key.compareTo(key) < 0) {
-				//if(this.comparator.compare((K) current.key, key) < 0) {
-					if(current.right == null) {
-						current.right = new Node<K, V>(key, value);
-						this.size += 1;
+					if(current.right.key.equals(key)){
+						current.right.setValue(newValue);
 						return true;
 					} else {
 						current = current.right;
 					}
 				} else if(current.key.compareTo(key) > 0) {
-					if(current.left == null) {
-						current.left = new Node<K, V>(key, value);
-						this.size += 1;
+					if(current.left.key.equals(key)){
+						current.left.setValue(newValue);
 						return true;
 					} else {
 						current = current.left;
@@ -76,15 +109,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				}
 				return false;
 			}
-		} catch (IllegalArgumentException exception) {
-			System.out.println(ILLEGAL_ARG_NULL_KEY);
 		}
-		return false;
-	}
-
-	@Override
-	public boolean replace(K key, V newValue) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -96,13 +121,42 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+		if(this.containsKey(key)){
+			this.replace(key, value);
+		} else {
+			this.put(key, value);
+		}
 		
 	}
 
 	@Override
 	public V get(K key) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+		if(key == null) {
+			throw new IllegalArgumentException();
+		}
+		if(!this.containsKey(key)) {
+			return null;
+		}
+		if(this.root.key.equals(key)) {
+			return this.root.value;
+		}
+		Node current = this.root;
+		while(current != null){
+			if(current.key.compareTo(key) < 0) {
+				if(current.right.key.equals(key)){
+					return (V) current.right.value;
+				} else {
+					current = current.right;
+				}
+			} else if(current.key.compareTo(key) > 0) {
+				if(current.left.key.equals(key)){
+					return (V) current.left.value;
+				} else {
+					current = current.left;
+				}
+			}
+			return null;
+		}
 		return null;
 	}
 
@@ -118,7 +172,35 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 	@Override
 	public boolean containsKey(K key) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+		if(key == null) {
+			throw new IllegalArgumentException();
+		}
+		if(this.root.key == null) {
+			return false;
+		}
+		if(this.root.key == key) {
+			return true;
+		}
+		Node current = this.root;
+		while(current != null){
+			if(current.key.compareTo(key) < 0) {
+				if(current.right == null) {
+					return false;
+				} else if(current.right.key != key){
+					current = current.right;
+				} else {
+					return true;
+				}
+			} else if(current.key.compareTo(key) > 0) {
+				if(current.left == null) {
+					return false;
+				} else if(current.left.key != key){
+					current = current.left;
+				} else {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
@@ -127,13 +209,29 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	// You must do inorder traversal of the tree
 	@Override
 	public List<K> keys() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<K> returnList = new ArrayList<K>();
+		if(this.isEmpty()) {
+			return (List) returnList;
+		} else {
+			keysIndexHelper(root, returnList, 0);
+			return (List) returnList;
+		}
+	}
+
+	public int keysIndexHelper(Node root, ArrayList<K> returnList, int index) {
+        if (root.left != null) {
+            index = (int) keysIndexHelper(root.left, returnList, index);
+        }
+        returnList.add(index++, (K) root.value);
+        if (root.right != null) {
+            index = (int) keysIndexHelper(root.right, returnList, index);
+        }
+		return index;
 	}
 	
 	private static class Node<K extends Comparable<? super K>, V> implements DefaultMap.Entry<K, V> {
-		K key;
-		V value;
+		private K key;
+		private V value;
 		Node<K, V> left;
 		Node<K, V> right;
 		
