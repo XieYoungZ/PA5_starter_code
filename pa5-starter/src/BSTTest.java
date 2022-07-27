@@ -57,12 +57,71 @@ public class BSTTest {
 		test.put("A", 1);
 		test.put("B", 2);
 		
-		//boolean answer = test.remove("A");
-		//int value = (int) test.get("C");
-		//int size = test.size();
-		//assertTrue(answer);
-		//assertEquals(2, size);
-		//assertEquals(2, value);
+		boolean answer = test.remove("B");
+		int value = (int) test.get("A");
+		int size = test.size();
+		assertEquals(true, answer);
+		assertEquals(1, value);
+		assertEquals(2, size);
 	}
 
+	@Test
+	public void removeTest2() {
+		BST test = new BST<>();
+		test.put("C", 3);
+		test.put("B", 1);
+		test.put("A", 2);
+		
+		test.remove("C");
+		test.remove("B");
+		boolean answer = test.remove("A");
+		int size = test.size();
+		assertEquals(true, answer);
+		assertEquals(0, size);
+	}
+
+	@Test
+	public void removeTest3() {
+		BST test = new BST<>();
+		test.put("A", 3);
+		test.put("B", 1);
+		test.put("C", 2);
+		
+		test.remove("A");
+		test.remove("B");
+		boolean answer = test.remove("C");
+		int size = test.size();
+		assertEquals(true, answer);
+		assertEquals(0, size);
+	}
+
+	@Test
+	public void removeTest4() {
+		BST test = new BST<>();
+		test.put("A", 3);
+		test.put("B", 1);
+		test.put("E", 2);
+		test.put("D", 2);
+		test.put("G", 2);
+		
+		boolean answer = test.remove("B");
+		int size = test.size();
+		assertEquals(true, answer);
+		assertEquals(4, size);
+	}
+
+	@Test
+	public void removeTest5() {
+		BST test = new BST<>();
+		test.put("E", 3);
+		test.put("D", 3);
+		test.put("A", 3);
+		test.put("C", 1);
+		test.put("B", 2);
+		
+		boolean answer = test.remove("D");
+		int size = test.size();
+		assertEquals(true, answer);
+		assertEquals(4, size);
+	}
 }

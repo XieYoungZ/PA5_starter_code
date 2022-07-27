@@ -29,11 +29,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		//this.comparator = new Comparator<K>();
 	}
 
-	// public BST(Node<K, V> root) {
-	// 	this.size = 0;
-	// 	this.root = new Node<K, V>(null, null);
-	// }
-
 	/**
 	 * Adds the specified key, value pair to this DefaultMap if it is not present
 	 * Note: duplicate keys are not allowed
@@ -72,19 +67,24 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				} else {
 					current = current.left;
 				}
+			} else {
+				return false;
 			}
-			return false;
 		}
 	}
 
+	/**
+	 * Replaces the value that maps to the key only if it is present
+	 * @param key The key whose mapped value is being replaced
+	 * @param newValue The value to replace the existing value with
+	 * @return true if the key was in this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public boolean replace(K key, V newValue) throws IllegalArgumentException {
 		if(key == null) {
 			throw new IllegalArgumentException();
 		}
-		// if(newValue == null) {
-		// 	return false;
-		// }
 		if(this.containsKey(key)){
 			if(this.root.key == key){
 				this.root.setValue(newValue);
@@ -113,97 +113,92 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return false;
 	}
 
+	/**
+	 * Remove the entry corresponding to the given key
+	 * 
+	 * @return true if an entry for the given key was removed
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
+		System.out.println("was here1");
 		if(key == null) {
 			throw new IllegalArgumentException();
 		}
+		System.out.println("was here2");
 		if(!this.containsKey(key)) {
 			return false;
 		}
-		deteleNode(key);
-		return true;
-	}
-		
-	
-	 
-	private void deteleNode(Comparable key){
+		System.out.println("was here3");
+		if(this.root.key.compareTo(key) == 0 
+		&& this.root.left == null 
+		&& this.root.right == null) {
+			this.root = new Node<K, V>(null, null);
+			this.size = 0;
+			return true;
+		}
+		if(this.root.key.compareTo(key) == 0 
+		&& this.root.left != null 
+		&& this.root.right == null) {
+			this.root = this.root.left;
+			this.size --;
+			return true;
+		}
+		if(this.root.key.compareTo(key) == 0 
+		&& this.root.left == null 
+		&& this.root.right != null) {
+			this.root = this.root.right;
+			this.size --;
+			return true;
+		}
+		System.out.println("was here4");
 		Node current = root;
 		Node parent = null;
-		while(current != null){
-			parent = current;
+		while(true){
 			if(current.key.compareTo(key) < 0) {
+				parent = current;
 				current = current.right;
 			} else if(current.key.compareTo(key) > 0) {
+				parent = current;
 				current = current.left;
+			} else {
+				break;
 			}
 		}
+		System.out.println("was here5");
 		if(current.left == null && current.right == null) {
 			if(current != this.root) {
 				if(parent.left == null) {
 					parent.right = null;
 					this.size --;
-					return;
+					System.out.println("right leaf");
+					return true;
 				} else if(parent.right == null) {
 					parent.left = null;
 					this.size --;
-					return;
+					System.out.println("left leaf");
+					return true;
 				}
-			} else {
-				this.root = null;
-				return;
 			}
+		} else if(current.left != null) {
+			parent.left = current.left;
+			this.size --;
+			System.out.println("subroot only left");
+			return true;
+		} else if(current.right != null) {
+			parent.right = current.right;
+			this.size --;
+			System.out.println("subroot only right");
+			return true;
 		}
-		return;
+		return false;
 	}
 
-	private K findMinKey(Node current) {
-		K minKey = (K) current.key;
-		while(current.left != null) {
-			minKey = root.left.key;
-			root = root.left;
-		}
-		return minKey;
-	}
-
-	// else {
-	// 	if(current.left == null) {
-	// 		current = current.right;
-	// 		this.size -= 1;
-	// 		return;
-	// 	} else if(current.right == null) {
-	// 		current = current.left;
-	// 		this.size -= 1;
-	// 		return;
-	// 	}
-	// 	current.key = findMinKey(current.right);
-	// 	//current.right = deteleNode(current.right, current.key);
-	// }
-
-	// Node parent = null;
-		// Node current = this.root;
-		// while(current != null) {
-		// 	parent = current;
-		// 	if(current.key.compareTo(key) < 0) {
-		// 		current = current.right;
-		// 	} else if(current.key.compareTo(key) > 0) {
-		// 		current = current.left;
-		// 	}
-		// }
-		// if(current.left == null && current.right == null) {
-		// 	if(current != this.root) {
-		// 		if(parent.left == null) {
-		// 			parent.right = null;
-		// 		} else if(parent.right == null) {
-		// 			parent.left = null;
-		// 		}
-		// 	} else {
-		// 		this.root = null;
-		// 	}
-		// } else if(current.left != null && current.right != null) {
-		// 	Node successorNode = findMinKey(current)
-		// }
-
+	/**
+	 * Adds the key, value pair to this DefaultMap if it is not present,
+	 * otherwise, replaces the value with the given value
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {
 		if(this.containsKey(key)){
@@ -214,6 +209,10 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		
 	}
 
+	/**
+	 * @return the value corresponding to the specified key
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public V get(K key) throws IllegalArgumentException {
 		if(key == null) {
@@ -239,22 +238,35 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				} else {
 					current = current.left;
 				}
+			} else {
+				return (V) current.value;
 			}
-			return null;
 		}
 		return null;
 	}
 
+	/**
+	 * 
+	 * @return The number of (key, value) pairs in this DefaultMap
+	 */
 	@Override
 	public int size() {
 		return this.size;
 	}
 
+	/**
+	 * 
+	 * @return true iff this.size() == 0 is true
+	 */
 	@Override
 	public boolean isEmpty() {
 		return (size == 0);
 	}
 
+	/**
+	 * @return true if the specified key is in this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
 	@Override
 	public boolean containsKey(K key) throws IllegalArgumentException {
 		if(key == null) {
@@ -284,6 +296,8 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				} else {
 					return true;
 				}
+			} else {
+				return true;
 			}
 		}
 		return false;
@@ -292,6 +306,11 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	// Keys must be in ascending sorted order
 	// You CANNOT use Collections.sort() or any other sorting implementations
 	// You must do inorder traversal of the tree
+	/**
+	 * 
+	 * @return an array containing the keys of this DefaultMap. If this DefaultMap is 
+	 * empty, returns array of length zero. 
+	 */
 	@Override
 	public List<K> keys() {
 		ArrayList<K> returnList = new ArrayList<K>();
@@ -317,8 +336,8 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	private static class Node<K extends Comparable<? super K>, V> implements DefaultMap.Entry<K, V> {
 		private K key;
 		private V value;
-		Node<K, V> left;
-		Node<K, V> right;
+		private Node<K, V> left;
+		private Node<K, V> right;
 		
 		public Node(K key, V value){
 			this.key = key;
@@ -341,8 +360,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		public void setValue(V value) {
 			this.value = value;
 		}
-		
-		
 	}
 	 
 }
