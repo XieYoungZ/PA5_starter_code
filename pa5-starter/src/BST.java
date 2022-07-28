@@ -49,7 +49,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		} else if (this.root.key.equals(key)){
 			return false;
 		}
-		Node current = this.root;
+		Node<K, V> current = this.root;
 		while(true) {
 			if(current.key.compareTo(key) < 0) {
 				if(current.right == null) {
@@ -90,7 +90,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				this.root.setValue(newValue);
 				return true;
 			}
-			Node current = this.root;
+			Node<K, V> current = this.root;
 			while(current != null){
 				if(current.key.compareTo(key) < 0) {
 					if(current.right.key.equals(key)){
@@ -148,8 +148,8 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			this.size --;
 			return true;
 		}
-		Node current = root;
-		Node parent = null;
+		Node<K, V> current = root;
+		Node<K, V> parent = null;
 		while(true){
 			if(current.key.compareTo(key) < 0) {
 				parent = current;
@@ -215,7 +215,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		if(this.root.key.equals(key)) {
 			return this.root.value;
 		}
-		Node current = this.root;
+		Node<K, V> current = this.root;
 		while(current != null){
 			if(current.key.compareTo(key) < 0) {
 				if(current.right.key.equals(key)){
@@ -269,7 +269,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		if(this.root.key == key) {
 			return true;
 		}
-		Node current = this.root;
+		Node<K, V> current = this.root;
 		while(current != null){
 			if(current.key.compareTo(key) < 0) {
 				if(current.right == null) {
@@ -308,28 +308,30 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		if(this.isEmpty()) {
 			return returnList;
 		} else {
-			returnList = this.keys(this.root);
+			returnList = this.keysHelper(this.root);
 			return returnList;
 		}
 	}
 
-	public List<K> keys(Node<K, V> current) {
+	public List<K> keysHelper(Node<K, V> current) {
 		List<K> tempList = new ArrayList<K>();
-        if (current.left != null) {
-            tempList = this.keys(current.left);
-        }
-		tempList.add(current.getKey());
-		if (root.right != null) {
-            tempList = addAll(this.keys(current.left));
-        }
+		if(current != null) {
+			if(current.left != null) {
+				tempList = this.keysHelper(current.left);
+			}
+			tempList.add(current.getKey());
+			if (current.right != null) {
+				tempList.addAll(this.keysHelper(current.right));
+			}
+		} 
 		return tempList;
 	}
 	
 	private static class Node<K extends Comparable<? super K>, V> implements DefaultMap.Entry<K, V> {
 		private K key;
 		private V value;
-		private Node<K, V> left;
-		private Node<K, V> right;
+		Node<K, V> left;
+		Node<K, V> right;
 		
 		public Node(K key, V value){
 			this.key = key;

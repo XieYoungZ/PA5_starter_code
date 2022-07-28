@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -139,4 +140,23 @@ public class BSTTest {
 		assertEquals(true, answer);
 		assertEquals(4, size);
 	}
+
+	@Test
+	public void keysTest1() {
+		BST test = new BST<>();
+		test.put("C", 3);
+		test.put("A", 1);
+		test.put("B", 2);
+		test.put("F", 6);
+		test.put("X", 24);
+		test.put("Z", 26);
+
+		
+		int size = test.size();
+		assertEquals(6, size);
+		List<String> ans = test.keys();
+		List<String> expected = Arrays.asList("A", "B", "C","F","X","Z");
+		assertEquals(expected, ans);
+	}
+
 }
