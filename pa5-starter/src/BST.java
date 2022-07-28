@@ -304,24 +304,25 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 */
 	@Override
 	public List<K> keys() {
-		ArrayList<K> returnList = new ArrayList<K>();
+		List<K> returnList = new ArrayList<K>();
 		if(this.isEmpty()) {
-			return (List) returnList;
+			return returnList;
 		} else {
-			keysIndexHelper(root, returnList, 0);
-			return (List) returnList;
+			returnList = this.keys(this.root);
+			return returnList;
 		}
 	}
 
-	public int keysIndexHelper(Node root, ArrayList<K> returnList, int index) {
-        if (root.left != null) {
-            index = (int) keysIndexHelper(root.left, returnList, index);
+	public List<K> keys(Node<K, V> current) {
+		List<K> tempList = new ArrayList<K>();
+        if (current.left != null) {
+            tempList = this.keys(current.left);
         }
-        returnList.add(index++, (K) root.value);
-        if (root.right != null) {
-            index = (int) keysIndexHelper(root.right, returnList, index);
+		tempList.add(current.getKey());
+		if (root.right != null) {
+            tempList = addAll(this.keys(current.left));
         }
-		return index;
+		return tempList;
 	}
 	
 	private static class Node<K extends Comparable<? super K>, V> implements DefaultMap.Entry<K, V> {
