@@ -27,6 +27,21 @@ public class BSTTest {
 	}
 
 	@Test
+	public void putTest2() {
+		BST test = new BST<>();
+		test.put("C", 3);
+		test.put("A", 1);
+		test.put("B", 2);
+		boolean ans1 = test.put("F", 6);
+		boolean ans2 = test.put("X", 24);
+		boolean ans3 = test.put("Z", 26);
+
+		assertTrue(ans1);
+		assertTrue(ans2);
+		assertTrue(ans3);
+	}
+
+	@Test
 	public void getTest1() {
 		BST test = new BST<>();
 		test.put("C", 3);

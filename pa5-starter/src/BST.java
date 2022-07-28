@@ -121,15 +121,12 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 */
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
-		System.out.println("was here1");
 		if(key == null) {
 			throw new IllegalArgumentException();
 		}
-		System.out.println("was here2");
 		if(!this.containsKey(key)) {
 			return false;
 		}
-		System.out.println("was here3");
 		if(this.root.key.compareTo(key) == 0 
 		&& this.root.left == null 
 		&& this.root.right == null) {
@@ -151,7 +148,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			this.size --;
 			return true;
 		}
-		System.out.println("was here4");
 		Node current = root;
 		Node parent = null;
 		while(true){
@@ -165,30 +161,25 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				break;
 			}
 		}
-		System.out.println("was here5");
 		if(current.left == null && current.right == null) {
 			if(current != this.root) {
 				if(parent.left == null) {
 					parent.right = null;
 					this.size --;
-					System.out.println("right leaf");
 					return true;
 				} else if(parent.right == null) {
 					parent.left = null;
 					this.size --;
-					System.out.println("left leaf");
 					return true;
 				}
 			}
 		} else if(current.left != null) {
 			parent.left = current.left;
 			this.size --;
-			System.out.println("subroot only left");
 			return true;
 		} else if(current.right != null) {
 			parent.right = current.right;
 			this.size --;
-			System.out.println("subroot only right");
 			return true;
 		}
 		return false;
