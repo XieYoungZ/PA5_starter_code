@@ -134,56 +134,39 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			this.size = 0;
 			return true;
 		}
-		if(this.root.key.compareTo(key) == 0 
-		&& this.root.left != null 
-		&& this.root.right == null) {
-			this.root = this.root.left;
-			this.size --;
-			return true;
-		}
-		if(this.root.key.compareTo(key) == 0 
-		&& this.root.left == null 
-		&& this.root.right != null) {
-			this.root = this.root.right;
-			this.size --;
-			return true;
-		}
-		Node<K, V> current = root;
-		Node<K, V> parent = null;
-		while(true){
-			if(current.key.compareTo(key) < 0) {
-				parent = current;
-				current = current.right;
-			} else if(current.key.compareTo(key) > 0) {
-				parent = current;
-				current = current.left;
-			} else {
-				break;
-			}
-		}
-		if(current.left == null && current.right == null) {
-			if(current != this.root) {
-				if(parent.left == null) {
-					parent.right = null;
-					this.size --;
-					return true;
-				} else if(parent.right == null) {
-					parent.left = null;
-					this.size --;
-					return true;
-				}
-			}
-		} else if(current.left != null) {
-			parent.left = current.left;
-			this.size --;
-			return true;
-		} else if(current.right != null) {
-			parent.right = current.right;
-			this.size --;
-			return true;
-		}
-		return false;
+		this.root = this.deleteHelperRecursive(this.root, key);
+		this.size --;
+		return true;
 	}
+
+	public Node<K, V> deleteHelperRecursive (Node<K, V> current, K key) {
+        if(current == null)
+            return current;
+        if(current.key.compareTo(key) < 0) {
+            current.right = deleteHelperRecursive(current.right, key);
+        } else if (current.key.compareTo(key) > 0) {
+			current.left = deleteHelperRecursive(current.left, key);
+        } else {
+            if (current.left == null) {
+                return current.right;
+            } else if (current.right == null)
+                return current.left;
+
+			Node<K, V> temp = findMinValue(current.right);
+			current.value = temp.value;
+			current.key = temp.key;
+            current.right = deleteHelperRecursive(current.right, temp.key);
+        }
+        return current;
+    }
+
+	public Node<K, V> findMinValue(Node<K, V> current) {
+		while(current.left != null){
+			current = current.left;
+		}
+		return current;
+	}
+
 
 	/**
 	 * Adds the key, value pair to this DefaultMap if it is not present,
